@@ -24,19 +24,32 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
   var socket = io();
-    
+    socket.emit('join', {roomId: 123})
+    socket.emit('login', {token: '1231u2yh3gg127i3'})
   var form = document.getElementById('form');
   var input = document.getElementById('input');
-  var messages = document.getElementById('messages')
 
   form.addEventListener('submit', function(e) {
     e.preventDefault();
     if (input.value) {
-      socket.emit('chat message', input.value);
-      messages.append(`<li>hello</li>`)
+        const obj = {
+            message: input.value,
+            user: 'Jonah'
+        }
+    console.log('in socket:')
+    console.log(socket)
+      socket.emit('chat message', obj);
       input.value = '';
     }
   });
+  socket.on('chat message', function(msg) {
+      console.log('received message:')
+      console.log(msg)
+    var item = document.createElement('li');
+    item.textContent = msg;
+    messages.appendChild(item);
+    window.scrollTo(0, document.body.scrollHeight);
+  })
 </script>
   </body>
 </html>

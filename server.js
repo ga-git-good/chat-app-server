@@ -2,6 +2,8 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
+const http = require('http')
+const Io = require('./IoServer')
 
 // require route files
 const exampleRoutes = require('./app/routes/example_routes')
@@ -20,7 +22,7 @@ const auth = require('./lib/auth')
 
 // define server and client ports
 // used for cors and local port declaration
-const serverDevPort = 4741
+const serverDevPort = 3040
 const clientDevPort = 7165
 
 // establish database connection
@@ -34,13 +36,16 @@ mongoose.connect(db, {
 
 // instantiate express application object
 const app = express()
+const server = http.createServer(app)
+const IoServer = Io.create(server)
 
 // set CORS headers on response from this API using the `cors` NPM package
 // `CLIENT_ORIGIN` is an environment variable that will be set on Heroku
 app.use(cors({ origin: process.env.CLIENT_ORIGIN || `http://localhost:${clientDevPort}` }))
 
 // define port for API to run on
-const port = process.env.PORT || serverDevPort
+
+// const port = process.env.PORT || serverDevPort
 
 // register passport authentication middleware
 app.use(auth)
@@ -65,9 +70,9 @@ app.use(userRoutes)
 app.use(errorHandler)
 
 // run API on designated port (4741 in this case)
-app.listen(port, () => {
-  console.log('listening on port ' + port)
+server.listen(serverDevPort, () => {
+  console.log('listening on port 3040')
 })
 
 // needed for testing
-module.exports = app
+module.exports = IoServer
