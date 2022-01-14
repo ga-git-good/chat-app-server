@@ -3,6 +3,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
 const http = require('http')
+
 const Io = require('./src/IoServer')
 
 // require route files
@@ -39,11 +40,22 @@ mongoose.connect(db, {
 // instantiate express application object
 const app = express()
 const server = http.createServer(app)
+const iolistener = require('socket.io')(
+	(server,
+	{
+		cors: {
+			origin: 'http://localhost:7165',
+			methods: ['GET', 'POST'],
+			allowedHeaders: ['my-custom-header'],
+			credentials: false,
+		},
+	})
+).listen(server)
 const IoServer = Io.create(server)
 
 // set CORS headers on response from this API using the `cors` NPM package
 // `CLIENT_ORIGIN` is an environment variable that will be set on Heroku
-app.use(cors({ origin: process.env.CLIENT_ORIGIN || `http://localhost:${clientDevPort}` }))
+app.use(cors())
 
 // define port for API to run on
 
