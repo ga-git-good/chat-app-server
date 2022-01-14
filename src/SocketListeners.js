@@ -1,20 +1,21 @@
-const IoServer = require('./IoServer')
-// const UserSocket = require('./UserSocket')
 
-console.log(IoServer)
+// const UserSocket = require('./UserSocket')
 
 const connected = []
 
-IoServer.events.on('new-connection', (socket) => {
-  console.log('user joined')
-  console.log('socket connected: ')
-  connected.push(socket) // TODO: going to be a DB object
-})
+const newConnection = (socket) => {
+	console.log('socket connected: ')
+	connected.push(socket) // TODO: going to be a DB object
+}
 
-IoServer.events.on('join', async (req, socket) => {
-  await socket.join(req.roomId.toString())
+const join = (req, socket) => {
+  console.log('hit join')
+}
 
-  // for testing
-  IoServer.send('test', req.roomId.toString())
-  IoServer.send('test', 'jonahs-room')
-})
+const addListeners = (server) => {
+  console.log('calling addlisteners')
+  server.events.on('new-connection', newConnection)
+  server.events.on('join', join)
+}
+
+module.exports = addListeners
