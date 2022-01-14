@@ -3,7 +3,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
 const http = require('http')
-const Io = require('./IoServer')
+const Io = require('./src/IoServer')
 
 // require route files
 const exampleRoutes = require('./app/routes/example_routes')
