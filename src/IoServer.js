@@ -1,9 +1,11 @@
 const { Server } = require('socket.io')
+const Emitter = require('events')
 const UserSocket = require('./UserSocket')
 
 class Io {
   constructor (server, name) {
     this.name = name
+    this.events = new Emitter()
     this.server = new Server(server)
     this.server.on('connection', (socket) => {
       console.log('user connected')
