@@ -1,5 +1,5 @@
 {
-  "name": "express-api-template",
+  "name": "chat-app-server",
   "version": "0.0.1",
   "description": "",
   "main": "server.js",
@@ -28,7 +28,6 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
-    "eslint": "^6.7.2",
     "mocha": "^6.2.2",
     "nodemon": "^2.0.2",
     "standard": "^14.3.1"
