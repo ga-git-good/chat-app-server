@@ -2,10 +2,15 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
+const http = require('http')
+
+const Io = require('./src/IoServer')
 
 // require route files
 const exampleRoutes = require('./app/routes/example_routes')
 const userRoutes = require('./app/routes/user_routes')
+const roomRoutes = require('./app/routes/room_routes')
+const messageRoutes = require('./app/routes/message_routes')
 
 // require middleware
 const errorHandler = require('./lib/error_handler')
@@ -20,7 +25,7 @@ const auth = require('./lib/auth')
 
 // define server and client ports
 // used for cors and local port declaration
-const serverDevPort = 4741
+const serverDevPort = 3040
 const clientDevPort = 7165
 
 // establish database connection
@@ -34,13 +39,27 @@ mongoose.connect(db, {
 
 // instantiate express application object
 const app = express()
+const server = http.createServer(app)
+const iolistener = require('socket.io')(
+	(server,
+	{
+		cors: {
+			origin: 'http://localhost:7165',
+			methods: ['GET', 'POST'],
+			allowedHeaders: ['my-custom-header'],
+			credentials: false,
+		},
+	})
+).listen(server)
+const IoServer = Io.create(server)
 
 // set CORS headers on response from this API using the `cors` NPM package
 // `CLIENT_ORIGIN` is an environment variable that will be set on Heroku
-app.use(cors({ origin: process.env.CLIENT_ORIGIN || `http://localhost:${clientDevPort}` }))
+app.use(cors())
 
 // define port for API to run on
-const port = process.env.PORT || serverDevPort
+
+// const port = process.env.PORT || serverDevPort
 
 // register passport authentication middleware
 app.use(auth)
@@ -58,6 +77,8 @@ app.use(requestLogger)
 // register route files
 app.use(exampleRoutes)
 app.use(userRoutes)
+app.use(roomRoutes)
+app.use(messageRoutes)
 
 // register error handling middleware
 // note that this comes after the route middlewares, because it needs to be
@@ -65,9 +86,9 @@ app.use(userRoutes)
 app.use(errorHandler)
 
 // run API on designated port (4741 in this case)
-app.listen(port, () => {
-  console.log('listening on port ' + port)
+server.listen(serverDevPort, () => {
+  console.log('listening on port 3040')
 })
 
 // needed for testing
-module.exports = app
+module.exports = IoServer

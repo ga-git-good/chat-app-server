@@ -1,5 +1,5 @@
 {
-  "name": "express-api-template",
+  "name": "chat-app-server",
   "version": "0.0.1",
   "description": "",
   "main": "server.js",
@@ -22,12 +22,12 @@
     "mongodb": "^3.4.0",
     "mongoose": "^5.8.1",
     "passport": "^0.4.1",
-    "passport-http-bearer": "^1.0.1"
+    "passport-http-bearer": "^1.0.1",
+    "socket.io": "^4.4.1"
   },
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
-    "eslint": "^6.7.2",
     "mocha": "^6.2.2",
     "nodemon": "^2.0.2",
     "standard": "^14.3.1"
