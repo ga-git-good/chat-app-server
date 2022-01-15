@@ -1,10 +1,12 @@
 // require necessary NPM packages
+const dotenv = require('dotenv')
+dotenv.config()
 const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
 const http = require('http')
 const Io = require('./src/IoServer')
-const addListeners = require('./src/SocketListeners')
+const {addListeners} = require('./src/SocketListeners')
 
 // require route files
 const exampleRoutes = require('./app/routes/example_routes')
