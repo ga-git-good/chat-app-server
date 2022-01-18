@@ -92,3 +92,5 @@ server.listen(serverDevPort, () => {
   console.log('listening on port 3040')
   addListeners(IoServer)
 })
+
+module.exports = IoServer
