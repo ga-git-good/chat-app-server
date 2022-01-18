@@ -25,7 +25,7 @@ class UserSocket {
     this.#socket.on('send-message', msg => {
       console.log('msg logged in class: ', msg)
       console.log('from socket: ', this.id)
-      this.#socket.broadcast.emit('message', msg);
+      //this.#socket.broadcast.emit('message', msg);
       this.#server.sendMessage(msg)
     })
     this.#socket.on('join', (req) => {
