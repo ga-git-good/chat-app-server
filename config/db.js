@@ -5,7 +5,7 @@ const mongooseBaseName = 'chat-app'
 
 // create the mongodb uri for development and test
 const database = {
-  development: `mongodb://localhost/${mongooseBaseName}-development`,
+  development: `${process.env.DB_URI}`,
   test: `mongodb://localhost/${mongooseBaseName}-test`
 }
 
