@@ -5,6 +5,8 @@ const crypto = require('crypto')
 const passport = require('passport')
 // bcrypt docs: https://github.com/kelektiv/node.bcrypt.js
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const { JWT_SECRET } = process.env
 
 // see above for explanation of "salting", 10 rounds is recommended
 const bcryptSaltRounds = 10
@@ -82,7 +84,10 @@ router.post('/sign-in', (req, res, next) => {
       // if the passwords matched
       if (correctPassword) {
         // the token will be a 16 byte random hex string
-        const token = crypto.randomBytes(16).toString('hex')
+        const package = {
+          userId: user._id
+        }
+        const token = jwt.sign(package, JWT_SECRET)
         user.token = token
         // save the token to the DB as a property on user
         return user.save()
