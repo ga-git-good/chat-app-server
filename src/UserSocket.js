@@ -45,18 +45,15 @@ class UserSocket {
         this.user = user
         this.events.emit('loggedin', this)
       } else {
-        console.log(`user ${decoded.userId} not found in db; auth failed`)
-        this.#authenticated = false
-        this.events.emit('loggedin', false)
-        this.destroy()
+        throw 'token verification failed'
       }
     } catch(err) {
       console.error(err)
-      return false
+      this.destroy()
     }
   }
   loggedIn = () => {
-    return this.#authenticated
+    return this.#authenticated === true
   }
   destroy = () => {
     console.log(this.#authenticated)
