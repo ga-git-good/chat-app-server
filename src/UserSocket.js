@@ -4,16 +4,16 @@ const { JWT_SECRET } = process.env
 const User = require('../app/models/user')
 const Emitter = require('events')
 const {v4} = require('uuid')
-const IoServer = require('../server')
 
 class UserSocket {
-  
+  #server
   #authenticated
   #socket
-  constructor (socket) {
+  constructor (socket, server) {
     this.events = new Emitter()
     this.id = v4()
     this.#socket = socket
+    this.#server = server
     this.addListeners()
     this.#authenticated = false
     console.log(socket.id)
@@ -25,6 +25,8 @@ class UserSocket {
     this.#socket.on('send-message', msg => {
       console.log('msg logged in class: ', msg)
       console.log('from socket: ', this.id)
+      this.#socket.broadcast.emit('message', msg);
+      this.#server.sendMessage(msg)
     })
     this.#socket.on('join', (req) => {
       console.log('hit join')
@@ -72,14 +74,6 @@ class UserSocket {
     // TODO: disconnect socket
     // then:
     destroySocket(this.id)
-  }
-
-  broadcast = () => {
-    this.socket.on('connection', (socket) => {
-      socket.on('chat message', (msg) => {
-        this.socket.broadcast.emit('send-message', msg);
-      })
-    })
   }
 }
 

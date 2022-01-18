@@ -4,10 +4,10 @@ const UserSocket = require('./UserSocket')
 class Io {
   constructor (server) {
     this.events = new Emitter()
-    this.server = server
+    this.#server = server
     this.#rooms = []
-    this.server.on('connection', (socket) => {
-      const newSocket = new UserSocket(socket)
+    this.#server.on('connection', (socket) => {
+      const newSocket = new UserSocket(socket, this)
       this.events.emit('new-connection', newSocket)
       // socket.on('connected', () => console.log('socket connected'))
       // socket.on('connection', () => console.log('socket connected'))
@@ -34,6 +34,11 @@ class Io {
   }
   logEmitter() {
     console.log(this.events)
+  }
+  sendMessage(msg) {
+    console.log('server sending message:')
+    console.log(msg)
+    this.#server.to(msg.roomId).emit('message', msg.message)
   }
   #server
   #socket
