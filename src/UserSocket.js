@@ -22,7 +22,7 @@ class UserSocket {
   addListeners () {
     this.#socket.on('send-message', msg => {
       console.log('msg logged in class: ', msg)
-      console.log('from socket: ', this.socket.id)
+      console.log('from socket: ', this.id)
       // emit message to room
     })
     this.#socket.on('join', (req) => {
