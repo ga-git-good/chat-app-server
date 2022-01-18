@@ -43,15 +43,15 @@ mongoose.connect(db, {
 const app = express()
 const server = http.createServer(app)
 const iolistener = require('socket.io')(
-	(server,
-	{
-		cors: {
-			origin: 'http://localhost:7165',
-			methods: ['GET', 'POST'],
-			allowedHeaders: ['my-custom-header'],
-			credentials: false,
-		},
-	})
+  (server,
+  {
+    cors: {
+      origin: 'http://localhost:7165',
+      methods: ['GET', 'POST'],
+      allowedHeaders: ['my-custom-header'],
+      credentials: false
+    }
+  })
 ).listen(server)
 const IoServer = Io.create(iolistener)
 
