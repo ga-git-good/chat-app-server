@@ -38,7 +38,7 @@ class Io {
   sendMessage(msg) {
     console.log('server sending message:')
     console.log(msg)
-    this.#server.to(msg.roomId).emit('message', msg.message)
+    this.#server.to(msg.roomId).emit('message', msg)
   }
   #server
   #socket
