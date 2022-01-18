@@ -26,6 +26,16 @@ const joinRoom = (userId, roomId) => {
   console.log(`user ${userId} requesting to join room ${roomId}`)
 }
 
+const checkRoomAccess = (userID, roomId) => {
+  Room.findOne({ _id: roomId }, (err, room) => {
+    if (room.validUsers.includes(userID)) {
+      return true
+    } else {
+      return false
+    }
+  })
+}
+
 module.exports = {
   addListeners,
   joinRoom,

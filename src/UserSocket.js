@@ -73,6 +73,14 @@ class UserSocket {
     // then:
     destroySocket(this.id)
   }
+
+  broadcast = () => {
+    this.socket.on('connection', (socket) => {
+      socket.on('chat message', (msg) => {
+        this.socket.broadcast.emit('send-message', msg);
+      })
+    })
+  }
 }
 
 module.exports = UserSocket
