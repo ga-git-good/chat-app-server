@@ -2,7 +2,9 @@ const express = require('express')
 const passport = require('passport')
 const router = express.Router()
 const customErrors = require('../../lib/custom_errors')
+const UserSocket = require('../../src/UserSocket')
 const Room = require('../models/rooms.js')
+const User = require('../models/user.js')
 
 // we'll use this function to send 404 when non-existant document is requested
 const requireToken = passport.authenticate('bearer', { session: false })
@@ -12,25 +14,26 @@ const handle404 = customErrors.handle404
 const requireOwnership = customErrors.requireOwnership
 
 router.post('/create-room', requireToken, (req, res, next) => {
-    req.body.room.owner = req.user._id
-    console.log(req.body)
-
-    Room.create(req.body.room)
+  Room.create({ name: req.body.room.name, validUsers: [req.body.userId], owner: req.body.userId, messages: [] })
     .then(room => {
-        res.status(201).json({ room })
+      res.status(201).json({ room })
     })
     .catch(next)
 })
 
-router.get('/Show-rooms/:id', requireToken, (req, res, next) => {
-	req.body.room.owner = req.user._id
-	console.log(req.body)
+router.get('/show-rooms', requireToken, (req, res, next) => {
+  Room.find()
+    .then(room => {
+      res.status(200).json({ room })
+    })
+    .catch(next)
+})
 
-	Room.create(req.body.room)
-		.then((room) => {
-			res.status(201).json({ room })
-		})
-		.catch(next)
+router.get('/show-users', requireToken, (req, res, next) => {
+  User.find()
+    .then(user => {
+      res.status(200).json({ user })
+    })
 })
 
 module.exports = router
