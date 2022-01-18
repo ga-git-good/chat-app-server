@@ -6,15 +6,18 @@ class Io {
     this.events = new Emitter()
     this.server = server
     this.server.on('connection', (socket) => {
-      console.log('user connected')
       const newSocket = new UserSocket(socket)
       this.events.emit('new-connection', newSocket)
+      // socket.on('connected', () => console.log('socket connected'))
+      // socket.on('connection', () => console.log('socket connected'))
     })
   }
   static create (server) {
     const newServer = new this(server)
-    console.log('created room')
     return newServer
+  }
+  logEmitter() {
+    console.log(this.events)
   }
   #server
   #socket

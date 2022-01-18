@@ -1,10 +1,12 @@
 // require necessary NPM packages
+const dotenv = require('dotenv')
+dotenv.config()
 const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
 const http = require('http')
-
 const Io = require('./src/IoServer')
+const {addListeners} = require('./src/SocketListeners')
 
 // require route files
 const exampleRoutes = require('./app/routes/example_routes')
@@ -51,7 +53,7 @@ const iolistener = require('socket.io')(
 		},
 	})
 ).listen(server)
-const IoServer = Io.create(server)
+const IoServer = Io.create(iolistener)
 
 // set CORS headers on response from this API using the `cors` NPM package
 // `CLIENT_ORIGIN` is an environment variable that will be set on Heroku
@@ -88,7 +90,5 @@ app.use(errorHandler)
 // run API on designated port (4741 in this case)
 server.listen(serverDevPort, () => {
   console.log('listening on port 3040')
+  addListeners(IoServer)
 })
-
-// needed for testing
-module.exports = IoServer
