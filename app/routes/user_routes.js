@@ -5,6 +5,8 @@ const crypto = require('crypto')
 const passport = require('passport')
 // bcrypt docs: https://github.com/kelektiv/node.bcrypt.js
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const { JWT_SECRET } = process.env
 
 // see above for explanation of "salting", 10 rounds is recommended
 const bcryptSaltRounds = 10
