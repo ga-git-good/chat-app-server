@@ -14,7 +14,7 @@ const handle404 = customErrors.handle404
 const requireOwnership = customErrors.requireOwnership
 
 router.post('/create-room', requireToken, (req, res, next) => {
-  Room.create({ name: req.body.room.name, validUsers: [req.body.user._id], owner: req.body.user._id, messages: [] })
+  Room.create({ name: req.body.room.name, validUsers: [req.body.userId], owner: req.body.userId, messages: [] })
     .then(room => {
       res.status(201).json({ room })
     })
