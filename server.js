@@ -37,7 +37,7 @@ mongoose.connect(db, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true
-})
+}).then(console.log('MongoDB connection successfull'))
 
 // instantiate express application object
 const app = express()
