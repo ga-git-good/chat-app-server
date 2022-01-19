@@ -1,5 +1,5 @@
 
-// const UserSocket = require('./UserSocket')
+const Room = require('../app/models/rooms')
 
 const connected = []
 
@@ -39,5 +39,6 @@ const checkRoomAccess = (userID, roomId) => {
 module.exports = {
   addListeners,
   joinRoom,
-  destroySocket
+  destroySocket,
+  checkRoomAccess
 }
