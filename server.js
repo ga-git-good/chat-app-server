@@ -81,6 +81,7 @@ app.use(express.urlencoded({ extended: true }))
 // register route files
 app.get('/', (req, res) => {
 	console.log('hit root')
+	res.json({message: 'welcome to gg-chat-api'})
 })
 app.use(imgRoutes)
 app.use(userRoutes)
