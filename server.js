@@ -62,8 +62,9 @@ app.use(cors())
 
 // define port for API to run on
 
-const port = process.env.PORT || serverDevPort
-
+const port = process.env.PORT
+console.log('PORT:')
+console.log(port)
 // register passport authentication middleware
 app.use(auth)
 
