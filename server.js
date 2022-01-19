@@ -93,8 +93,8 @@ app.use(messageRoutes)
 app.use(errorHandler)
 
 // run API on designated port (4741 in this case)
-server.listen(serverDevPort, () => {
-  console.log('listening on port 3040')
+server.listen(port, () => {
+  console.log('listening on port ', port)
   addListeners(IoServer)
 })
 
