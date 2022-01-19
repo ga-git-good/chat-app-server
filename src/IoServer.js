@@ -2,9 +2,6 @@ const Emitter = require('events')
 const UserSocket = require('./UserSocket')
 
 class Io {
-	#server
-	#socket
-	#rooms
 	constructor(server) {
 		this.events = new Emitter()
 		this.#server = server
