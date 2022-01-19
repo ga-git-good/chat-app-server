@@ -59,9 +59,6 @@ class UserSocket {
       this.destroy()
     }
   }
-  joinRoom = (roomId) => {
-
-  }
   loggedIn = () => {
     return this.authenticated === true
   }
