@@ -6,6 +6,10 @@ const passport = require('passport')
 // bcrypt docs: https://github.com/kelektiv/node.bcrypt.js
 const bcrypt = require('bcrypt')
 
+const multer = require('multer')
+const upload = multer()
+
+
 // see above for explanation of "salting", 10 rounds is recommended
 const bcryptSaltRounds = 10
 
@@ -28,6 +32,9 @@ const router = express.Router()
 // SIGN UP
 // POST /sign-up
 router.post('/sign-up', (req, res, next) => {
+  const dataArray = []
+  console.log('credentials:')
+  console.log(req.body.credentials)
   // start a promise chain, so that any errors will pass to `handle`
   Promise.resolve(req.body.credentials)
     // reject any requests where `credentials.password` is not present, or where
@@ -56,6 +63,21 @@ router.post('/sign-up', (req, res, next) => {
     .then(user => res.status(201).json({ user: user.toObject() }))
     // pass any errors along to the error handler
     .catch(next)
+})
+
+router.post('/upload/:userName', upload.any(), async (req, res) => {
+    const file = req.files[0]
+    const user = await User.findOne({userName: req.params.userName})
+    if (user) {
+      user.pfpType = file.mimetype
+      user.profilePicture = file.buffer
+      await user.save()
+      res.status(200).end()
+      return
+    } else {
+      console.log('error!')
+      res.status(400).end()
+    }
 })
 
 // SIGN IN
