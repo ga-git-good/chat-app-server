@@ -6,41 +6,37 @@ const Emitter = require('events')
 const {v4} = require('uuid')
 
 class UserSocket {
-  #server
-  #authenticated
-  #socket
   constructor (socket, server) {
     this.events = new Emitter()
     this.id = v4()
-    this.#socket = socket
-    this.#server = server
+    this.socket = socket
+    this.server = server
     this.addListeners()
-    this.#authenticated = false
+    this.authenticated = false
     console.log(socket.id)
     this.token = socket.handshake.query.token
-    this.#login()
+    this.login()
     this.rooms = []
   }
   addListeners () {
-    this.#socket.on('send-message', msg => {
+    this.socket.on('send-message', msg => {
       console.log('msg logged in class: ', msg)
       console.log('from socket: ', this.id)
-      //this.#socket.broadcast.emit('message', msg);
-      this.#server.sendMessage(msg)
+      this.server.sendMessage(msg)
     })
-    this.#socket.on('join', (req) => {
+    this.socket.on('join', (req) => {
       console.log('hit join')
-      if (this.#authenticated) {
+      if (this.authenticated) {
 				// checkRoomAccess(this.user._id, req.roomId)
 				if (true) {
 					console.log(`joining user ${this.user._id} to room ${req.roomId}`)
-					this.#socket.join(req.roomId)
+					this.socket.join(req.roomId)
           this.rooms.push(req.roomId)
 				}
 			}
     })
   }
-  async #login () {
+  async login () {
     // check token with jwt
     // if (valid) this.authenticated = true
     console.log('token: ', this.token)
@@ -50,16 +46,16 @@ class UserSocket {
       const user = await User.findOne({_id: decoded.userId})
       if (decoded && user) {
         console.log('user authenticated')
-        this.#authenticated = true
+        this.authenticated = true
         this.user = user
         this.events.emit('loggedin', this)
-        this.#socket.emit('loggedin', true)
+        this.socket.emit('loggedin', true)
       } else {
         throw 'token verification failed'
       }
     } catch(err) {
       console.error(err)
-      this.#socket.emit('loggedin', false)
+      this.socket.emit('loggedin', false)
       this.destroy()
     }
   }
@@ -67,10 +63,10 @@ class UserSocket {
 
   }
   loggedIn = () => {
-    return this.#authenticated === true
+    return this.authenticated === true
   }
   destroy = () => {
-    console.log(this.#authenticated)
+    console.log(this.authenticated)
     // TODO: disconnect socket
     // then:
     destroySocket(this.id)
