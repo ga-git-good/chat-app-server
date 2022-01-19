@@ -28,6 +28,7 @@ const joinRoom = (userId, roomId) => {
 
 const checkRoomAccess = (userID, roomId) => {
   Room.findOne({ _id: roomId }, (err, room) => {
+    if (err) return false
     if (room.validUsers.includes(userID)) {
       return true
     } else {
