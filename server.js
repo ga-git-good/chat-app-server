@@ -78,6 +78,9 @@ app.use(express.urlencoded({ extended: true }))
 //app.use(requestLogger)
 
 // register route files
+app.get('/', (req, res) => {
+	console.log('hit root')
+})
 app.use(imgRoutes)
 app.use(userRoutes)
 app.use(roomRoutes)
