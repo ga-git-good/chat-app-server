@@ -62,8 +62,9 @@ app.use(cors())
 
 // define port for API to run on
 
-// const port = process.env.PORT || serverDevPort
-
+const port = process.env.PORT
+console.log('PORT:')
+console.log(port)
 // register passport authentication middleware
 app.use(auth)
 
@@ -78,6 +79,10 @@ app.use(express.urlencoded({ extended: true }))
 //app.use(requestLogger)
 
 // register route files
+app.get('/', (req, res) => {
+	console.log('hit root')
+	res.json({message: 'welcome to gg-chat-api'})
+})
 app.use(imgRoutes)
 app.use(userRoutes)
 app.use(roomRoutes)
@@ -89,8 +94,8 @@ app.use(messageRoutes)
 app.use(errorHandler)
 
 // run API on designated port (4741 in this case)
-server.listen(serverDevPort, () => {
-  console.log('listening on port 3040')
+server.listen(port, () => {
+  console.log('listening on port ', port)
   addListeners(IoServer)
 })
 
