@@ -13,6 +13,7 @@ const exampleRoutes = require('./app/routes/example_routes')
 const userRoutes = require('./app/routes/user_routes')
 const roomRoutes = require('./app/routes/room_routes')
 const messageRoutes = require('./app/routes/message_routes')
+const imgRoutes = require('./app/routes/image_routes')
 
 // require middleware
 const errorHandler = require('./lib/error_handler')
@@ -74,10 +75,10 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 // log each request as it comes in for debugging
-app.use(requestLogger)
+//app.use(requestLogger)
 
 // register route files
-app.use(exampleRoutes)
+app.use(imgRoutes)
 app.use(userRoutes)
 app.use(roomRoutes)
 app.use(messageRoutes)
