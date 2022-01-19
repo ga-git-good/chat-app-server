@@ -59,10 +59,10 @@ class UserSocket {
       this.destroy()
     }
   }
-  loggedIn = () => {
+  loggedIn() {
     return this.authenticated === true
   }
-  destroy = () => {
+  destroy() {
     console.log(this.authenticated)
     // TODO: disconnect socket
     // then:
