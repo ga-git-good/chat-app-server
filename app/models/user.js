@@ -18,6 +18,14 @@ const userSchema = new mongoose.Schema(
 			unique: true,
 			trim: true,
 		},
+		profilePicture: {
+			type: Buffer,
+			required: false
+		},
+		pfpType: {
+			type: String,
+			required: false
+		},
 		rooms: [
 			{
 				type: mongoose.Schema.Types.ObjectId,
@@ -37,5 +45,12 @@ const userSchema = new mongoose.Schema(
 		},
 	}
 )
+
+userSchema.methods.getBuffer = function () {
+	if (!this.profilePicture) {
+		return false
+	}
+	return this.profilePicture
+}
 
 module.exports = mongoose.model('User', userSchema)
