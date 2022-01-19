@@ -29,10 +29,10 @@ router.get('/show-rooms', requireToken, (req, res, next) => {
     .catch(next)
 })
 
-router.get('/show-users', requireToken, (req, res, next) => {
-  User.find()
-    .then(user => {
-      res.status(200).json({ user })
+router.get('/show-room-users', requireToken, (req, res, next) => {
+  Room.findById(req.body.roomID)
+    .then(room => {
+      res.status(200).json({ users: room.validUsers })
     })
 })
 
