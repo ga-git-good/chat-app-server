@@ -5,8 +5,6 @@ const crypto = require('crypto')
 const passport = require('passport')
 // bcrypt docs: https://github.com/kelektiv/node.bcrypt.js
 const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-const { JWT_SECRET } = process.env
 
 const multer = require('multer')
 const upload = multer()
@@ -89,7 +87,7 @@ router.post('/sign-in', (req, res, next) => {
   let user
 
   // find a user based on the email that was passed
-  User.findOne({ userName: req.body.credentials.userName })
+  User.findOne({ email: req.body.credentials.email })
     .then(record => {
       // if we didn't find a user with that email, send 401
       if (!record) {
@@ -105,10 +103,7 @@ router.post('/sign-in', (req, res, next) => {
       // if the passwords matched
       if (correctPassword) {
         // the token will be a 16 byte random hex string
-        const package = {
-          userId: user._id
-        }
-        const token = jwt.sign(package, JWT_SECRET)
+        const token = crypto.randomBytes(16).toString('hex')
         user.token = token
         // save the token to the DB as a property on user
         return user.save()
