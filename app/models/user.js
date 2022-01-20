@@ -26,6 +26,10 @@ const userSchema = new mongoose.Schema(
 			type: String,
 			required: false
 		},
+    status: {
+      type: String,
+      required: false
+    },
 		rooms: [
 			{
 				type: mongoose.Schema.Types.ObjectId,
