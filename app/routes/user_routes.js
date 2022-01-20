@@ -170,9 +170,16 @@ router.delete('/sign-out', requireToken, (req, res, next) => {
   req.user.save()
     .then(() => {
       User.updateOne({ _id: req.user.id }, { status: 'offline' })
-      .then(user => res.sendStatus(204).json({ userStatus: user.status }))
+      .then(user => res.status(204).json({ userStatus: user.status }))
     })
     .catch(next)
+})
+
+router.delete('/go-offline', requireToken, (req, res, next) => {
+  console.log('going offline')
+  // update the user status to show offline
+  User.updateOne({ _id: req.user.id }, { status: 'offline' })
+    .then(user => res.status(204).json({ userStatus: user.status }))
 })
 
 module.exports = router
