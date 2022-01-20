@@ -29,12 +29,17 @@ router.get('/show-rooms', requireToken, (req, res, next) => {
     .catch(next)
 })
 
-
 router.get('/show-users', requireToken, (req, res, next) => {
   User.find()
     .then(user => {
       res.status(200).json({ user })
     })
+})
+
+router.delete('./delete-room/:id', requireToken, (req, res, next) => {
+  Room.deleteOne({ _id: req.params.id, owner: req.user.id })
+    .then(res.status(204))
+    .catch(next)
 })
 
 module.exports = router
