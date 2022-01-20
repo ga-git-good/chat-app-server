@@ -119,8 +119,14 @@ router.post('/sign-in', (req, res, next) => {
       }
     })
     .then(user => {
+      let userStatus
+      User.updateOne({ _id: user.id }, { status: 'online' })
+      .then(user =>{
+        userStatus = user.status
+      })
       // return status 201, the email, and the new token
-      res.status(201).json({ user: user.toObject() })
+      res.status(201).json({ user: user.toObject(), userStatus })
+      // need to send the status update with the response 
     })
     .catch(next)
 })
@@ -162,7 +168,10 @@ router.delete('/sign-out', requireToken, (req, res, next) => {
   req.user.token = null
   // save the token and respond with 204
   req.user.save()
-    .then(() => res.sendStatus(204))
+    .then(() => {
+      User.updateOne({ _id: req.user.id }, { status: 'offline' })
+      .then(user => res.sendStatus(204).json({ userStatus: user.status }))
+    })
     .catch(next)
 })
 
