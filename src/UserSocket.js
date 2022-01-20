@@ -22,7 +22,7 @@ class UserSocket {
     this.socket.on('send-message', msg => {
       console.log('msg logged in class: ', msg)
       console.log('from socket: ', this.id)
-      this.server.sendMessage(msg)
+      this.server.sendMessage(msg, this.user)
     })
     this.socket.on('join', (req) => {
       console.log('hit join')
