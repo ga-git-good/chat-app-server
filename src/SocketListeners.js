@@ -35,10 +35,15 @@ const joinRoom = (roomId, socket) => {
 }
 
 const deleteRoom = (roomId, server, userId) => {
+  // console.log(server.server.sockets)
+  const clients = server.server.sockets.adapter
+  console.log(clients.rooms.get(roomId))
+  console.log(clients)
   Room.deleteOne({ _id: roomId, owner: userId })
     .then(obj => {
       if (obj.deletedCount > 0) {
-        server.sockets.clients(roomId).forEach(socket => socket.leave(roomId))
+
+        server.server.clients(roomId).forEach(socket => socket.leave(roomId))
         return true
       }
       return false

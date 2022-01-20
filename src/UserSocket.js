@@ -37,8 +37,8 @@ class UserSocket {
       }
     })
     this.socket.on('delete-room', req => {
-      if (deleteRoom(req.id, this.server, this.user._id)) {
-        this.socket.emit('deleted', req.id)
+      if (deleteRoom(req.name, this.server, this.user._id)) {
+        this.socket.emit('deleted', req.name)
       } else {
         this.socket.emit('deleted', null)
       }
