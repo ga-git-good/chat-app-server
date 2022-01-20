@@ -29,7 +29,7 @@ router.get('/show-rooms', requireToken, (req, res, next) => {
     .catch(next)
 })
 
-router.get('/show-users', requireToken, (req, res, next) => {
+router.get('/show-server-users', requireToken, (req, res, next) => {
   User.find()
     .then(user => {
       res.status(200).json({ user })
