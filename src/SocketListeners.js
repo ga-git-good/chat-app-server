@@ -1,4 +1,4 @@
-
+const Room = require('../app/models/rooms')
 // const UserSocket = require('./UserSocket')
 
 const connected = []
@@ -6,8 +6,8 @@ const rooms = []
 // {roomId: asdasd, users: []}
 
 const newConnection = (socket) => {
-	console.log('socket connected: ')
-	connected.push(socket) // TODO: going to be a DB object
+  console.log('socket connected: ')
+  connected.push(socket) // TODO: going to be a DB object
 }
 
 const destroySocket = (socketId) => {
@@ -23,6 +23,11 @@ const addListeners = (server) => {
 }
 
 const joinRoom = (roomId, socket) => {
+  const existingRoom = rooms.find(room => room.id === roomId)
+  if (existingRoom) {
+    existingRoom.users.push(socket)
+  }
+  rooms.push({ roomId, users: [socket] })
   // TODO: check if roomId already in rooms array
   // If not, create a new room object, add the user, and push to array
   // If it already exists, add the user to the users array on the object
@@ -43,5 +48,6 @@ const checkRoomAccess = (userID, roomId) => {
 module.exports = {
   addListeners,
   joinRoom,
-  destroySocket
+  destroySocket,
+  checkRoomAccess
 }
