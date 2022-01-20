@@ -1,4 +1,6 @@
 const mongoose = require('mongoose')
+const Message = require('./message')
+const Schema = mongoose.Schema
 
 const roomSchema = new mongoose.Schema(
 	{
@@ -10,7 +12,7 @@ const roomSchema = new mongoose.Schema(
 		},
 		validUsers: [
 			{
-				type: mongoose.Schema.Types.ObjectId,
+				type: mongoose.Schema.ObjectId,
 				ref: 'User',
 			},
 		],
@@ -21,7 +23,7 @@ const roomSchema = new mongoose.Schema(
 		},
 		messages: [
 			{
-				type: mongoose.Schema.Types.ObjectId,
+				type: Schema.ObjectId,
 				ref: 'Message',
 			},
 		],
