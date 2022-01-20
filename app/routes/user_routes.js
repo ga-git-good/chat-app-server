@@ -122,6 +122,7 @@ router.post('/sign-in', (req, res, next) => {
       User.updateOne({ _id: user.id }, { status: 'online' })
       // return status 201, the email, and the new token
       res.status(201).json({ user: user.toObject() })
+      // need to send the status update with the response 
     })
     .catch(next)
 })
@@ -159,12 +160,14 @@ router.patch('/change-password', requireToken, (req, res, next) => {
 })
 
 router.delete('/sign-out', requireToken, (req, res, next) => {
-  User.updateOne({ _id: req.user.id }, { status: 'offline' })
   // create a new random token for the user, invalidating the current one
   req.user.token = null
   // save the token and respond with 204
   req.user.save()
-    .then(() => res.sendStatus(204))
+    .then(() => {
+      User.updateOne({ _id: req.user.id }, { status: 'offline' })
+      .then(user => res.sendStatus(204).json({ userStatus: user.status }))
+    })
     .catch(next)
 })
 
