@@ -47,7 +47,7 @@ const iolistener = require('socket.io')(
   (server,
   {
     cors: {
-      origin: 'http://localhost:7165',
+      origin: process.env.IO_CORS,
       methods: ['GET', 'POST'],
       allowedHeaders: ['my-custom-header'],
       credentials: false
@@ -65,6 +65,8 @@ app.use(cors())
 const port = process.env.PORT
 console.log('PORT:')
 console.log(port)
+console.log('IO_CORS:')
+console.log(process.env.IO_CORS)
 // register passport authentication middleware
 app.use(auth)
 
