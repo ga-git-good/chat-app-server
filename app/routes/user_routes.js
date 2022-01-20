@@ -119,8 +119,14 @@ router.post('/sign-in', (req, res, next) => {
       }
     })
     .then(user => {
+      let userStatus
+      User.updateOne({ _id: user.id }, { status: 'online' })
+      .then(user =>{
+        userStatus = user.status
+      })
       // return status 201, the email, and the new token
-      res.status(201).json({ user: user.toObject() })
+      res.status(201).json({ user: user.toObject(), userStatus })
+      // need to send the status update with the response 
     })
     .catch(next)
 })
@@ -157,4 +163,26 @@ router.patch('/change-password', requireToken, (req, res, next) => {
     .catch(next)
 })
 
+<<<<<<< HEAD
+=======
+router.delete('/sign-out', requireToken, (req, res, next) => {
+  // create a new random token for the user, invalidating the current one
+  req.user.token = null
+  // save the token and respond with 204
+  req.user.save()
+    .then(() => {
+      User.updateOne({ _id: req.user.id }, { status: 'offline' })
+      .then(user => res.status(204).json({ userStatus: user.status }))
+    })
+    .catch(next)
+})
+
+router.delete('/go-offline', requireToken, (req, res, next) => {
+  console.log('going offline')
+  // update the user status to show offline
+  User.updateOne({ _id: req.user.id }, { status: 'offline' })
+    .then(user => res.status(204).json({ userStatus: user.status }))
+})
+
+>>>>>>> dev
 module.exports = router

@@ -1,7 +1,7 @@
 const Emitter = require('events')
 const UserSocket = require('./UserSocket')
 const Message = require('../app/models/message')
-const message = require('../app/models/message')
+const Room = require('../app/models/rooms')
 
 class Io {
 	constructor(server) {
@@ -42,12 +42,16 @@ class Io {
 		console.log(msg)
 		this.server.to(msg.roomId).emit('message', msg)
     Message.create({
+      userName: msg.userName,
       owner: user._id,
       room: msg.roomId,
-      text: msg.message
-    }).then((msg) => {
-      console.log('added message to db:')
-      console.log(msg)
+      text: msg.message,
+      sentAt: msg.timestamp
+    }).then((created) => {
+      Room.findById(msg.roomId).then(room => {
+        room.messages.push(created._id)
+        room.save()
+      })
     })
 	}
 }
