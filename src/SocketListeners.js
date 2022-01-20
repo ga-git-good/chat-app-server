@@ -2,6 +2,8 @@
 // const UserSocket = require('./UserSocket')
 
 const connected = []
+const rooms = []
+// {roomId: asdasd, users: []}
 
 const newConnection = (socket) => {
 	console.log('socket connected: ')
@@ -20,10 +22,11 @@ const addListeners = (server) => {
   server.events.on('new-connection', newConnection)
 }
 
-const joinRoom = (userId, roomId) => {
-  // check if user is allowed to join room
-  // return true or false
-  console.log(`user ${userId} requesting to join room ${roomId}`)
+const joinRoom = (roomId, socket) => {
+  // TODO: check if roomId already in rooms array
+  // If not, create a new room object, add the user, and push to array
+  // If it already exists, add the user to the users array on the object
+  console.log(`user ${socket.id} requesting to join room ${roomId}`)
 }
 
 const checkRoomAccess = (userID, roomId) => {

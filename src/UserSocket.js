@@ -27,11 +27,12 @@ class UserSocket {
     this.socket.on('join', (req) => {
       console.log('hit join')
       if (this.authenticated) {
-				// checkRoomAccess(this.user._id, req.roomId)
+				//checkRoomAccess(this.user._id, req.roomId)
 				if (true) {
 					console.log(`joining user ${this.user._id} to room ${req.roomId}`)
 					this.socket.join(req.roomId)
           this.rooms.push(req.roomId)
+          joinRoom(req.roomId, this)
 				}
 			}
     })
