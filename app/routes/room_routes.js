@@ -5,6 +5,7 @@ const customErrors = require('../../lib/custom_errors')
 const UserSocket = require('../../src/UserSocket')
 const Room = require('../models/rooms.js')
 const User = require('../models/user.js')
+const Message = require('../models/message')
 
 // we'll use this function to send 404 when non-existant document is requested
 const requireToken = passport.authenticate('bearer', { session: false })
@@ -36,10 +37,25 @@ router.get('/show-server-users', requireToken, (req, res, next) => {
     })
 })
 
-router.delete('./delete-room/:id', requireToken, (req, res, next) => {
+router.delete('/delete-room/:id', requireToken, (req, res, next) => {
   Room.deleteOne({ _id: req.params.id, owner: req.user.id })
     .then(res.status(204))
     .catch(next)
+})
+
+router.get('/room/:id', requireToken, async (req, res) => {
+  const roomId = req.params.id
+  const room = await Room.findById(roomId)
+  if (room) {
+    const messages = await Promise.all(room.messages.map(id => {
+      return Message.findById(id)
+    }))
+    console.log(messages)
+    res.status(200).json(messages)
+    return
+  } else {
+    return res.status(404).end()
+  }
 })
 
 module.exports = router
