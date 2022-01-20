@@ -36,8 +36,12 @@ class UserSocket {
         }
       }
     })
-    this.socket.on('delete-room', room => {
-      deleteRoom(room.id, this.server)
+    this.socket.on('delete-room', req => {
+      if (deleteRoom(req.id, this.server, this.user._id)) {
+        this.socket.emit('deleted', req.id)
+      } else {
+        this.socket.emit('deleted', null)
+      }
     })
   }
   async login () {
