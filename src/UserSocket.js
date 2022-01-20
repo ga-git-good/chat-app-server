@@ -1,4 +1,4 @@
-const { joinRoom, destroySocket, checkRoomAccess } = require('./SocketListeners')
+const { joinRoom, destroySocket, deleteRoom, checkRoomAccess } = require('./SocketListeners')
 const jwt = require('jsonwebtoken')
 const { JWT_SECRET } = process.env
 const User = require('../app/models/user')
@@ -27,14 +27,17 @@ class UserSocket {
     this.socket.on('join', (req) => {
       console.log('hit join')
       if (this.authenticated) {
-				//checkRoomAccess(this.user._id, req.roomId)
-				if (true) {
-					console.log(`joining user ${this.user._id} to room ${req.roomId}`)
-					this.socket.join(req.roomId)
+        // checkRoomAccess(this.user._id, req.roomId)
+        if (true) {
+          console.log(`joining user ${this.user._id} to room ${req.roomId}`)
+          this.socket.join(req.roomId)
           this.rooms.push(req.roomId)
           joinRoom(req.roomId, this)
-				}
-			}
+        }
+      }
+    })
+    this.socket.on('delete-room', room => {
+      deleteRoom(room.id, this.server)
     })
   }
   async login () {
@@ -52,18 +55,18 @@ class UserSocket {
         this.events.emit('loggedin', this)
         this.socket.emit('loggedin', true)
       } else {
-        throw 'token verification failed'
+        throw new Error('token verification failed')
       }
-    } catch(err) {
+    } catch (err) {
       console.error(err)
       this.socket.emit('loggedin', false)
       this.destroy()
     }
   }
-  loggedIn() {
+  loggedIn () {
     return this.authenticated === true
   }
-  destroy() {
+  destroy () {
     console.log(this.authenticated)
     // TODO: disconnect socket
     // then:

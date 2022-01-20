@@ -34,6 +34,10 @@ const joinRoom = (roomId, socket) => {
   console.log(`user ${socket.id} requesting to join room ${roomId}`)
 }
 
+const deleteRoom = (roomId, server) => {
+  server.sockets.clients(roomId).forEach(socket => socket.leave(roomId))
+}
+
 const checkRoomAccess = (userID, roomId) => {
   Room.findOne({ _id: roomId }, (err, room) => {
     if (err) return false
@@ -49,5 +53,6 @@ module.exports = {
   addListeners,
   joinRoom,
   destroySocket,
-  checkRoomAccess
+  checkRoomAccess,
+  deleteRoom
 }
