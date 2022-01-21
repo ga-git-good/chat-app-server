@@ -26,16 +26,45 @@ const joinRoom = (roomId, socket) => {
   const existingRoom = rooms.find(room => room.id === roomId)
   if (existingRoom) {
     existingRoom.users.push(socket)
+    return
   }
   rooms.push({ roomId, users: [socket] })
-  // TODO: check if roomId already in rooms array
-  // If not, create a new room object, add the user, and push to array
-  // If it already exists, add the user to the users array on the object
-  console.log(`user ${socket.id} requesting to join room ${roomId}`)
 }
 
-const deleteRoom = (roomId, server) => {
-  server.sockets.clients(roomId).forEach(socket => socket.leave(roomId))
+const deleteRoom = (roomId, server, userId, cb) => {
+  // console.log(server.server.sockets)
+  console.log('ATTEMPTING TO DELETE ROOMID=')
+  console.log(userId)
+  const connected = server.server.sockets.adapter.rooms.get(roomId)
+	console.log('BEFORE LEAVING')
+	console.log(connected)
+  Room.deleteOne({ _id: roomId, owner: userId })
+    .then(obj => {
+      console.log('received object')
+      console.log(obj)
+      if (obj.deletedCount > 0) {
+        const room = rooms.find(room => room.roomId === roomId)
+        if (room) {
+          room.users.forEach(userSocket => {
+            userSocket.socket.leave(roomId)
+          })
+          console.log('AFTER LEAVING')
+					console.log(server.server.sockets.adapter.rooms.get(roomId))
+          console.log('returning true')
+          return cb(true)
+        }
+        // const connected = server.server.sockets.adapter.rooms.get(roomId)
+        // console.log('BEFORE LEAVING')
+        // console.log(connected)
+        // connected.forEach(client => {
+        //   console.log(client)
+        //   client.leave(roomId)
+          
+        // })
+        // server.server.clients(roomId).forEach(socket => socket.leave(roomId))
+      }
+      return cb(false)
+    })
 }
 
 const checkRoomAccess = (userID, roomId) => {

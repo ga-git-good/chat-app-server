@@ -31,10 +31,13 @@ router.get('/show-rooms', requireToken, (req, res, next) => {
 })
 
 router.get('/show-server-users', requireToken, (req, res, next) => {
-  User.find()
+  User.find().select('-profilePicture')
     .then(user => {
-      res.status(200).json({ user })
+      console.log('found users:')
+      console.log(user)
+      res.status(200).json({ user: user })
     })
+    .catch(err => console.error)
 })
 
 router.delete('/delete-room/:id', requireToken, (req, res, next) => {
@@ -50,7 +53,7 @@ router.get('/room/:id', requireToken, async (req, res) => {
     const messages = await Promise.all(room.messages.map(id => {
       return Message.findById(id)
     }))
-    console.log(messages)
+    // console.log(messages)
     res.status(200).json(messages)
     return
   } else {
@@ -61,13 +64,16 @@ router.get('/room/:id', requireToken, async (req, res) => {
 router.post('/add-user-to-room', requireToken, (req, res, next) => {
   const roomId = req.body.roomId
   const userId = req.body.userId
-
-  Room.findById({ _id: roomId })
+  try {
+    Room.findById({ _id: roomId })
     .then(room => {
       room.validUsers.push(userId)
       room.save()
         .then(room => res.status(201).json({ room }))
     })
+  } catch(err) {
+    res.status(500).end()
+  }
 })
 
 module.exports = router
