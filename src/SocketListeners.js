@@ -26,14 +26,9 @@ const joinRoom = (roomId, socket) => {
   const existingRoom = rooms.find(room => room.id === roomId)
   if (existingRoom) {
     existingRoom.users.push(socket)
+    return
   }
   rooms.push({ roomId, users: [socket] })
-  console.log('calling ROOMS.JOIN on ROOMID=', roomId)
-  console.log(socket.server.server.sockets.adapter.rooms.get(roomId))
-  // TODO: check if roomId already in rooms array
-  // If not, create a new room object, add the user, and push to array
-  // If it already exists, add the user to the users array on the object
-  console.log(`user ${socket.id} requesting to join room ${roomId}`)
 }
 
 const deleteRoom = (roomId, server, userId, cb) => {
