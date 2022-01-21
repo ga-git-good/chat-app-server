@@ -11,11 +11,11 @@ class UserSocket {
     this.id = v4()
     this.socket = socket
     this.server = server
-    this.addListeners()
     this.authenticated = false
     console.log(socket.id)
     this.token = socket.handshake.query.token
     this.login()
+    this.addListeners()
     this.rooms = []
   }
   addListeners () {
@@ -29,11 +29,13 @@ class UserSocket {
       if (this.authenticated) {
         // checkRoomAccess(this.user._id, req.roomId)
         if (true) {
-          console.log(`joining user ${this.user._id} to room ${req.roomId}`)
-          this.socket.join(req.roomId)
-          this.rooms.push(req.roomId)
-          joinRoom(req.roomId, this)
-          console.log('after join')
+					console.log(`joining user ${this.user._id} to room ${req.roomId}`)
+					this.socket.join(req.roomId)
+					this.rooms.push(req.roomId)
+					joinRoom(req.roomId, this)
+					console.log('after join')
+				} else {
+          this.socket.emit('unauthorized')
         }
       }
     })

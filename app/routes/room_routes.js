@@ -61,13 +61,16 @@ router.get('/room/:id', requireToken, async (req, res) => {
 router.post('/add-user-to-room', requireToken, (req, res, next) => {
   const roomId = req.body.roomId
   const userId = req.body.userId
-
-  Room.findById({ _id: roomId })
+  try {
+    Room.findById({ _id: roomId })
     .then(room => {
       room.validUsers.push(userId)
       room.save()
         .then(room => res.status(201).json({ room }))
     })
+  } catch(err) {
+    res.status(500).end()
+  }
 })
 
 module.exports = router
