@@ -184,8 +184,10 @@ router.delete('/go-offline', requireToken, (req, res, next) => {
 
 router.delete('/delete-account', requireToken, (req, res, next) => {
     User.deleteOne({ _id: req.user.id })
-    .then(del => res.status(204).json({ del }))
-    .catch(next)
+    .then(del => res.status(200).json({ del }))
+    .catch(err => {
+      res.status(403).json({ err })
+    })
 })
 
 module.exports = router
