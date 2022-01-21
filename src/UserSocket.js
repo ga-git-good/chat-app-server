@@ -33,15 +33,23 @@ class UserSocket {
           this.socket.join(req.roomId)
           this.rooms.push(req.roomId)
           joinRoom(req.roomId, this)
+          console.log('after join')
         }
       }
     })
     this.socket.on('delete-room', req => {
-      if (deleteRoom(req.name, this.server, this.user._id)) {
-        this.socket.emit('deleted', req.name)
-      } else {
-        this.socket.emit('deleted', null)
-      }
+      console.log('got request to delete room')
+      console.log(req)
+      const result = deleteRoom(req.roomId, this.server, this.user._id, (res) => {
+        console.log('after DeleteRoom')
+        console.log(res)
+        if (res) {
+					console.log('delte room succeeded')
+					this.socket.emit('deleted', req.roomId)
+				} else {
+					this.socket.emit('deleted', null)
+				}
+      })
     })
   }
   async login () {

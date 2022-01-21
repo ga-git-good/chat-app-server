@@ -163,8 +163,6 @@ router.patch('/change-password', requireToken, (req, res, next) => {
     .catch(next)
 })
 
-<<<<<<< HEAD
-=======
 router.delete('/sign-out', requireToken, (req, res, next) => {
   // create a new random token for the user, invalidating the current one
   req.user.token = null
@@ -184,5 +182,4 @@ router.delete('/go-offline', requireToken, (req, res, next) => {
     .then(user => res.status(204).json({ userStatus: user.status }))
 })
 
->>>>>>> dev
 module.exports = router
