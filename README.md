@@ -55,14 +55,14 @@ Produce documentation on Github:
 √   Link to wireframes and user stories
       
   WireFrame:
-    !['WireFrame'](https://imgur.com/gallery/z8FGrKU)
+    ![Imgur](https://i.imgur.com/nYaLgj5.png)
   
 *Your back-end repo's README should also have:*
 
 √ Link to Entity Relationship Diagram (ERD).
 
   ERD:
-    !['ERD'](https://imgur.com/a/z8FGrKU)
+    ![Imgur](https://i.imgur.com/V8UWMCx.png)
 
 √ A catalog of routes (paths and methods) that the API expects.
   *express routes:
