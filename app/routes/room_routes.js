@@ -31,10 +31,13 @@ router.get('/show-rooms', requireToken, (req, res, next) => {
 })
 
 router.get('/show-server-users', requireToken, (req, res, next) => {
-  User.find()
+  User.find().select('-profilePicture')
     .then(user => {
-      res.status(200).json({ user })
+      console.log('found users:')
+      console.log(user)
+      res.status(200).json({ user: user })
     })
+    .catch(err => console.error)
 })
 
 router.delete('/delete-room/:id', requireToken, (req, res, next) => {
