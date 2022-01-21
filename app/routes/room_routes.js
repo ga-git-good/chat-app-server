@@ -50,7 +50,7 @@ router.get('/room/:id', requireToken, async (req, res) => {
     const messages = await Promise.all(room.messages.map(id => {
       return Message.findById(id)
     }))
-    console.log(messages)
+    // console.log(messages)
     res.status(200).json(messages)
     return
   } else {
